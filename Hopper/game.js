@@ -42,6 +42,7 @@ firebase.auth().onAuthStateChanged(user => {
     if (!!user){
         userEmail = user.email;
         $(".registeration").hide();
+        $(".menutext").show();
         $(".menu").show();
         $(".player").show();
         startMenu();
@@ -81,7 +82,7 @@ var loginMenu = ()=>{
         // An error happened.
       });
     $(".deathMenu").hide();
-    $(".menutext").show();
+    $(".menutext").hide();
     $(".menu").hide();
     $(".player").hide();
 }
@@ -95,7 +96,7 @@ var startMenu = ()=>{ //menu to display at start of game
 }
 var deathMenu = ()=>{ //menu to display once player dies
     // $(".menutext").empty();
-    $(".deathMenu").html(`<p>Current User: ${userEmail}</p><p>SCORE: ${score}</p><p>HIGHSCORE: ${highscore} By: ${highscoreEmail}</p><p>PRESS ANY KEY TO RESTART</p><p><button id="logout">Logout</button></p>`);
+    $(".deathMenu").html(`<p>Current User: ${userEmail}</p><p>SCORE: ${score}</p><p>HIGHSCORE: ${highscore} By: ${highscoreEmail}</p><p>PRESS THE ENTER KEY TO RESTART</p><p><button id="logout">Logout</button></p>`);
     $(".menutext").hide();
     $(".deathMenu").show();
     $("#logout").click(()=>{
