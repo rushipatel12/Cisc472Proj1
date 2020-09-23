@@ -11,7 +11,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-auth.js"></script>
-        <script type='text/javascript' src="game.js"></script>
+        <script type='text/javascript' src="game.js" async></script>
     </head> 
     <body>
 
@@ -34,7 +34,15 @@
                     <p style="color:#F0F3F4";>PICK UP STARS FOR INVINCIBILITY</p>
                 <p>PRESS ANY KEY TO START PLAYING!</p>
             </div>
+            <div class="deathMenu">
+                <p>User: </p>
+                <p>SCORE: ${score}</p>
+                <p>HIGHSCORE: ${highscore}</p>
+                <p>PRESS ANY KEY TO RESTART</p>
+                <p><button id="logout">Logout</button></p>
             </div>
+            </div>
+            
             
             <div class = "platforms" id = "platforms"></div>
             <div class = "obstacles" id = "obstacles"></div> 

@@ -22,7 +22,9 @@ var score;
 var scrollScale = 1;
 var highscore = 0;
 var paused;
-var registered = false;
+var clicked = false;
+var userEmail;
+var highscoreEmail;
 
 var firebaseConfig = {
     apiKey: "AIzaSyDkvzHdqgDZqGVgTOgTJwAS4Eb_2pqtd-I",
@@ -38,9 +40,11 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.auth().onAuthStateChanged(user => {
     if (!!user){
-        registered = true;
-        console.log(registered);
-        alert(`You have successfully logged in ${user.displayName || user.email}`);
+        userEmail = user.email;
+        $(".registeration").hide();
+        $(".menu").show();
+        $(".player").show();
+        startMenu();
     }
   });
   
@@ -70,15 +74,16 @@ firebase.auth().onAuthStateChanged(user => {
 
 
 var loginMenu = ()=>{
+    firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+        console.log("Logged out in Menu");
+      }, function(error) {
+        // An error happened.
+      });
+    $(".deathMenu").hide();
+    $(".menutext").show();
     $(".menu").hide();
-    $(".player").hide()
-    if (registered){
-        $(".registeration").hide();
-        $(".menu").show();
-        $(".player").show();
-        startMenu();
-    }
-    
+    $(".player").hide();
 }
 
 var startMenu = ()=>{ //menu to display at start of game
@@ -89,15 +94,35 @@ var startMenu = ()=>{ //menu to display at start of game
     });
 }
 var deathMenu = ()=>{ //menu to display once player dies
-    $(".menutext").empty();
-    $(".menutext").html(`<p>SCORE: ${score}</p><p>HIGHSCORE: ${highscore}</p><p>PRESS ANY KEY TO RESTART</p>`);
+    // $(".menutext").empty();
+    $(".deathMenu").html(`<p>Current User: ${userEmail}</p><p>SCORE: ${score}</p><p>HIGHSCORE: ${highscore} By: ${highscoreEmail}</p><p>PRESS ANY KEY TO RESTART</p><p><button id="logout">Logout</button></p>`);
+    $(".menutext").hide();
+    $(".deathMenu").show();
+    $("#logout").click(()=>{
+        firebase.auth().signOut().then(function() {
+            // Sign-out successful.
+            console.log("Logged out in Button");
+            clearGame();
+            $("#email").val('');
+            $("#password").val('');
+            $("#password2").val('');
+            loginMenu();
+            $(".registeration").show();
+      }, function(error) {
+        // An error happened.
+      });
+    });
     $(".menu").show();
-    $(document).keydown(()=>{
-        $(".menu").hide();
-        $(document).off('keydown');
-        startGame();
+    $(document).keypress(function(event){
+        if (event.keyCode == 13){
+            $(".menu").hide();
+            // $(document).off('keydown');
+            clearGame();
+            startGame();
+        }
     });
 }
+
 var startGame = ()=>{
     //trying to scale everything with viewport size so it works the same on any device
     gravity = screenHeight/500000;
@@ -439,7 +464,11 @@ var clearGame = ()=>{ //clear all aspects of game
     obstacles = [];
     invincibilities = [];
     score = player.score;
-    highscore = Math.max(player.score,highscore);
+    if(player.score>=highscore){
+        highscore = player.score;
+        highscoreEmail = userEmail;
+    }
+    // highscore = Math.max(player.score,highscore);
     $(".platforms").empty();
     $(".obstacles").empty();
     $(".invincibilities").empty();
