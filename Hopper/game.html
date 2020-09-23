@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hopper</title>
+        <link rel="stylesheet" href="styles.css" type="text/css">
+        <script
+            src="http://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-auth.js"></script>
+        <script type='text/javascript' src="game.js"></script>
+    </head> 
+    <body>
+
+        <div id="fullscreen">
+            <img class = "player" id = "player" src="kangaroo.gif">
+            <div class = "registeration">
+                <p>Email Address <input id="email" type="text"></input>
+                    <br>Password <input id="password" type="text"></input>
+                <br>Confirm Password <input id="password2" type="text"></input>
+              <br><button id="loginemail">Login</button>
+              <button id="register">Register</button>
+              <button id="reset">Reset</button>
+              </p>
+            </div>
+                <div class = "menu"><h1 style="color:#F0F3F4";> HOPPER</h2>
+                    <div class = "menutext">
+                    <p>USE LEFT AND RIGHT ARROWS TO MOVE</p>
+                    <p style="color:#F0F3F4";> USE SPACEBAR TO PAUSE AND RESUME GAME</p>
+                    <p>HOP ON PLATFORMS AND AVOID OBSTACLES</p>
+                    <p style="color:#F0F3F4";>PICK UP STARS FOR INVINCIBILITY</p>
+                <p>PRESS ANY KEY TO START PLAYING!</p>
+            </div>
+            </div>
+            
+            <div class = "platforms" id = "platforms"></div>
+            <div class = "obstacles" id = "obstacles"></div> 
+            <div class = "invincibilities" id = "invincibilities"></div>     
+            <div border: 2px solid blue; class = "score" id = "score"></div>
+            <div class = "timer" id = "timer"></div>
+        </div>
+
+    <script type="text/javascript">
+        $(function(){
+            loginMenu();
+            //startGame(); 
+        });
+    </script>
+
+    </body>
+</html>
