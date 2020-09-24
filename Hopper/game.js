@@ -102,6 +102,7 @@ var deathMenu = ()=>{ //menu to display once player dies
     $("#logout").click(()=>{
         firebase.auth().signOut().then(function() {
             // Sign-out successful.
+            location.reload();
             console.log("Logged out in Button");
             clearGame();
             $("#email").val('');
