@@ -75,6 +75,7 @@ firebase.auth().onAuthStateChanged(user => {
 
 
 var loginMenu = ()=>{
+    $(".menu").hide();
     firebase.auth().signOut().then(function() {
         // Sign-out successful.
         console.log("Logged out in Menu");
@@ -83,7 +84,6 @@ var loginMenu = ()=>{
       });
     $(".deathMenu").hide();
     $(".menutext").hide();
-    $(".menu").hide();
     $(".player").hide();
 }
 
@@ -96,7 +96,7 @@ var startMenu = ()=>{ //menu to display at start of game
 }
 var deathMenu = ()=>{ //menu to display once player dies
     // $(".menutext").empty();
-    $(".deathMenu").html(`<p>Current User: ${userEmail}</p><p>SCORE: ${score}</p><p>HIGHSCORE: ${highscore} By: ${highscoreEmail}</p><p>PRESS THE ENTER KEY TO RESTART</p><p><button id="logout">Logout</button></p>`);
+    $(".deathMenu").html(`<p>CURRENT USER: ${userEmail.toUpperCase()}</p><p>SCORE: ${score}</p><p>HIGHSCORE: ${highscore} BY: ${highscoreEmail.toUpperCase()}</p><p>PRESS THE ENTER KEY TO RESTART</p><p><button id="logout">Logout</button></p>`);
     $(".menutext").hide();
     $(".deathMenu").show();
     $("#logout").click(()=>{
