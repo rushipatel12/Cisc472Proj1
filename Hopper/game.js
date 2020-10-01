@@ -20,11 +20,14 @@ var invincibilitySide;
 var updateScore;
 var score;
 var scrollScale = 1;
-var highscore = 0;
+// var highscore = 0;
 var paused;
 var clicked = false;
 var userEmail;
-var highscoreEmail;
+// var highscoreEmail;
+var tmp;
+var tmpScore;
+var tmpEmail;
 
 var firebaseConfig = {
     apiKey: "AIzaSyDkvzHdqgDZqGVgTOgTJwAS4Eb_2pqtd-I",
@@ -38,6 +41,7 @@ var firebaseConfig = {
   };
   
 firebase.initializeApp(firebaseConfig);
+
 firebase.auth().onAuthStateChanged(user => {
     if (!!user){
         userEmail = user.email;
@@ -47,6 +51,12 @@ firebase.auth().onAuthStateChanged(user => {
         $(".player").show();
         startMenu();
     }
+  });
+
+  var loginDatabase = firebase.database();
+  loginDatabase.ref("highscore").set({
+    highscoreEmail: '',
+    highest: 0,
   });
   
   $("#loginemail").click(()=>{
@@ -96,13 +106,20 @@ var startMenu = ()=>{ //menu to display at start of game
 }
 var deathMenu = ()=>{ //menu to display once player dies
     // $(".menutext").empty();
-    $(".deathMenu").html(`<p>CURRENT USER: ${userEmail.toUpperCase()}</p><p>SCORE: ${score}</p><p>HIGHSCORE: ${highscore} BY: ${highscoreEmail.toUpperCase()}</p><p>PRESS THE ENTER KEY TO RESTART</p><p><button id="logout">Logout</button></p>`);
+    loginDatabase.ref("highscore").once('value').then(function(snapshot){
+        console.log("Score: "+snapshot.val().highest);
+        console.log("Email: "+snapshot.val().highscoreEmail);
+        tmpEmail = snapshot.val().highscoreEmail;
+        tmpScore = snapshot.val().highest;
+        // $(".deathMenu").html(`<p>CURRENT USER: ${userEmail.toUpperCase()}</p><p>SCORE: ${score}</p><p>HIGHSCORE: ${tmpScore} BY: ${tmpEmail}</p><p>PRESS THE ENTER KEY TO RESTART</p><p><button id="logout">Logout</button></p>`);
+    });
+    $(".deathMenu").html(`<p>CURRENT USER: ${userEmail.toUpperCase()}</p><p>SCORE: ${score}</p><p>HIGHSCORE: ${tmpScore} BY: ${tmpEmail}</p><p>PRESS THE ENTER KEY TO RESTART</p><p><button id="logout">Logout</button></p>`);
     $(".menutext").hide();
     $(".deathMenu").show();
     $("#logout").click(()=>{
         firebase.auth().signOut().then(function() {
             // Sign-out successful.
-            location.reload();
+            // location.reload();
             console.log("Logged out in Button");
             clearGame();
             $("#email").val('');
@@ -466,10 +483,30 @@ var clearGame = ()=>{ //clear all aspects of game
     obstacles = [];
     invincibilities = [];
     score = player.score;
-    if(player.score>=highscore){
-        highscore = player.score;
-        highscoreEmail = userEmail;
-    }
+    console.log(score);
+    // var uid = firebase.auth().currentUser.uid;
+    loginDatabase.ref("highscore").once('value').then(function(snapshot){
+        tmp = snapshot.val().highest;
+        console.log("tmp:"+tmp);
+        if(player.score>=tmp){
+            console.log("entered");
+            var updates = {
+                highscoreEmail: userEmail,
+                highest: player.score,
+            };
+            // console.log(highscoreEmail);
+            // var newPostKey = loginDatabase.ref("highscore").child('posts').push().key;
+            // var updates = {};
+            // updates['/posts/' + newPostKey] = postData;
+            // updates['/user-posts/' + uid + '/' + newPostKey] = postData;
+
+            loginDatabase.ref("highscore").update(updates);
+            // console.log("Email: "+highscoreEmail);
+            // highscore = player.score;
+            // highscoreEmail = userEmail;
+        }
+    });
+    
     // highscore = Math.max(player.score,highscore);
     $(".platforms").empty();
     $(".obstacles").empty();

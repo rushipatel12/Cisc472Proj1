@@ -11,6 +11,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-database.js"></script>
         <script type='text/javascript' src="game.js" async></script>
     </head> 
     <body>
@@ -55,6 +56,10 @@
         $(function(){
             // $('.menu').hide();
             // location.reload();
+            $(".menu").hide();
+            $(".deathMenu").hide();
+            $(".menutext").hide();
+            $(".player").hide();
             loginMenu();
             //startGame(); 
         });
