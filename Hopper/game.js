@@ -54,10 +54,10 @@ firebase.auth().onAuthStateChanged(user => {
   });
 
   var loginDatabase = firebase.database();
-  loginDatabase.ref("highscore").set({
-    highscoreEmail: '',
-    highest: 0,
-  });
+  loginDatabase.ref("highscore").once('value').then(function(snapshot){
+    tmpEmail = snapshot.val().highscoreEmail;
+    tmpScore = snapshot.val().highest;
+});
   
   $("#loginemail").click(()=>{
     firebase.auth().signInWithEmailAndPassword($("#email").val(), $("#password").val()).catch(function(error) {
@@ -106,6 +106,7 @@ var startMenu = ()=>{ //menu to display at start of game
 }
 var deathMenu = ()=>{ //menu to display once player dies
     // $(".menutext").empty();
+    
     loginDatabase.ref("highscore").once('value').then(function(snapshot){
         console.log("Score: "+snapshot.val().highest);
         console.log("Email: "+snapshot.val().highscoreEmail);
@@ -113,7 +114,7 @@ var deathMenu = ()=>{ //menu to display once player dies
         tmpScore = snapshot.val().highest;
         // $(".deathMenu").html(`<p>CURRENT USER: ${userEmail.toUpperCase()}</p><p>SCORE: ${score}</p><p>HIGHSCORE: ${tmpScore} BY: ${tmpEmail}</p><p>PRESS THE ENTER KEY TO RESTART</p><p><button id="logout">Logout</button></p>`);
     });
-    $(".deathMenu").html(`<p>CURRENT USER: ${userEmail.toUpperCase()}</p><p>SCORE: ${score}</p><p>HIGHSCORE: ${tmpScore} BY: ${tmpEmail}</p><p>PRESS THE ENTER KEY TO RESTART</p><p><button id="logout">Logout</button></p>`);
+    $(".deathMenu").html(`<p>CURRENT USER: ${userEmail.toUpperCase()}</p><p>SCORE: ${score}</p><p>HIGHSCORE: ${tmpScore} BY: ${tmpEmail.toUpperCase()}</p><p>PRESS THE ENTER KEY TO RESTART</p><p><button id="logout">Logout</button></p>`);
     $(".menutext").hide();
     $(".deathMenu").show();
     $("#logout").click(()=>{
@@ -506,7 +507,12 @@ var clearGame = ()=>{ //clear all aspects of game
             // highscoreEmail = userEmail;
         }
     });
-    
+
+    loginDatabase.ref("highscore").once('value').then(function(snapshot){
+        tmpEmail = snapshot.val().highscoreEmail;
+        tmpScore = snapshot.val().highest;
+    });
+
     // highscore = Math.max(player.score,highscore);
     $(".platforms").empty();
     $(".obstacles").empty();
